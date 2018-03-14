@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 // Create by Inho 2018. 3. 8. 오후 2:11:45
-// 2698 인접한 비트의 개수
+// 5557 1학년
 
 public class Study_5557 {
 	public static void main(String[] args) {
