@@ -1,63 +1,64 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Scanner;
-
+// Create by Inho 2018. 5. 2. 
 
 public class Study_10282{
-	static int INF = 98765432;
+	static class node{
+		int a,s;
+		node(int a, int s){
+			this.a = a;
+			this.s = s;
+		}
+	}
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int TC = scanner.nextInt();
-		scanner.nextLine();
+		Scanner sc = new Scanner(System.in);
+		int TC = sc.nextInt();
 		while(TC-->0) {
-			int count = 0;
-			int N = scanner.nextInt();
-			int D = scanner.nextInt();
-			int C = scanner.nextInt();
-			scanner.nextLine();
-			int[][] Graph = new int[N+1][N+1];
-			int[] dis = new int[N+1];
-			int[] post = new int[N+1];
-			for(int i=0;i<=N;i++) {
-				for(int j=0;j<=N;j++) {
-					Graph[j][i] = INF;
-				}
+			int N = sc.nextInt()+1;
+			int D = sc.nextInt();
+			int C = sc.nextInt();
+			int[] sum = new int[N];
+			boolean[] state = new boolean[N];
+			ArrayList<node>[] map = new ArrayList[N];
+			for(int i=0;i<N;i++){
+				map[i] = new ArrayList<node>();
+				sum[i] = 987654321;
 			}
 			
-			for(int i=0;i<D;i++) {
-				int a = scanner.nextInt();
-				int b = scanner.nextInt();
-				int s = scanner.nextInt();
-				scanner.nextLine();
-				Graph[b][a] = s;
+			for(int i=0;i<D;i++){
+				int a =sc.nextInt();
+				int b = sc.nextInt();
+				int s = sc.nextInt();
+				
+				map[b].add(new node(a,s));
 			}
-			Queue<Integer> q = new LinkedList<Integer>();
+			
+			PriorityQueue<Integer> q = new PriorityQueue<>();
 			q.add(C);
-			count++;
-			while((!q.isEmpty())) {
+			sum[C] =0;
+			while(!q.isEmpty()){
 				int node = q.poll();
-				for(int i=0;i<=N;i++) {
-					if(Graph[node][i] != INF) {
-						if(dis[i] > dis[node] + Graph[node][i]) {
-							dis[i] = dis[node] + Graph[node][i];
-							q.add(i);
-							post[i] = node;
-						}else{
-							dis[i] = dis[node] + Graph[node][i];
-							q.add(i);
-							count++;
-							post[i] = node;
-						}
+				state[node] = true;
+				for(int i=0;i<map[node].size();i++){
+					int next = map[node].get(i).a;
+					if( sum[next] > sum[node] + map[node].get(i).s){
+						sum[next] = sum[node] + map[node].get(i).s;
+						q.add(next);
 					}
 				}
 			}
+			int count =0;
 			int max = 0;
-			for(int i=0;i<=N;i++) {
-				if(max < dis[i]) {
-					max = dis[i];
+			for(int i=0;i<N;i++){
+				if(state[i] != false){
+					count++;
+				}
+				if(sum[i] != 987654321 && max < sum[i]){
+					max = sum[i];
 				}
 			}
-			System.out.println(""+count + " "+max);
+			System.out.println(count + " " + max);
 		}
 	}
 }
